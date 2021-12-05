@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Configuration>Release</Configuration>
+    <Platform>x64</Platform>
+    <OutputPath>..\bin\x64\RelWithDebInfo</OutputPath>
+    <!--输出目录去掉版本目录。没有这个标签，输出目录是OutputPath\net5 -->
+    <AppendTargetFrameworkToOutputPath>output</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="simple_wrapper_dotnet">
+      <HintPath>$(OutputPath)\simple_wrapper_dotnet.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

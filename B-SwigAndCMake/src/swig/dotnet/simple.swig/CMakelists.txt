@@ -1,0 +1,67 @@
+﻿######################################################
+# 自定义选项
+######################################################
+project(simple_swig)
+set(SWIG_INTERFACE_FILE_NAME    simple.i)                   #SWIG的接口文件名
+set(SWIG_MODULE_NAME            simple_wrapper)             #SWIG模块名称（即SWIG_INTERFACE_FILE_NAME中的%module）
+set(SWIG_CSHARP_NAME            ${SWIG_MODULE_NAME}_dotnet) #SWIG生成的C#动态库名称，即为${SWIG_CSHARP_NAME}.dll
+
+# 输出到对应的build目录下
+set(CXX_OUTPUT_DIR    ${PROJECT_BINARY_DIR}/cxx)
+set(CSHARP_OUTPUT_DIR ${PROJECT_BINARY_DIR}/csharp)
+# 输出到源目录下
+# set(CXX_OUTPUT_DIR    ${CMAKE_CURRENT_LIST_DIR}/cxx)
+# set(CSHARP_OUTPUT_DIR ${CMAKE_CURRENT_LIST_DIR}/csharp)
+
+# 清空历史文件
+file(REMOVE_RECURSE  ${CXX_OUTPUT_DIR})
+file(REMOVE_RECURSE  ${CSHARP_OUTPUT_DIR})
+
+######################################################
+# 创建一个SWIG工程
+# 1. 运行SWIG命令，生成包装文件与接口文件
+# 2. 将C++的包装文件编译成<target-name>.dll
+######################################################
+set_property(SOURCE ${SWIG_INTERFACE_FILE_NAME} PROPERTY CPLUSPLUS ON)  #指定为C++（没有这一条会生成wrap.c）
+set_property(SOURCE ${SWIG_INTERFACE_FILE_NAME} PROPERTY COMPILE_OPTIONS
+  ### 编译*.i时，用COMPILE_OPTIONS中的编译选项
+  -namespace glal
+)
+##-namespace 翻译*.i文件时，加入namespace指定的前缀
+#例如：-namespace ABCD.E.F.G
+#       FooHello(int);被翻译为CSharp_ABCDfEfFfG_FooHello__SWIG_0___(int jarg1)
+#       并且相对应的C#文件也会有namspace：
+#       namespace ABCD.E.F.G {
+#       }
+
+# 创建一个SWIG模块（等同于add_library命令）
+swig_add_library(${SWIG_MODULE_NAME}
+  TYPE SHARED                         #库类型：动态库
+  LANGUAGE csharp                     #包装成C#语言
+  OUTFILE_DIR ${CXX_OUTPUT_DIR}       #.cxx文件输出目录
+  OUTPUT_DIR ${CSHARP_OUTPUT_DIR}     #csharp文件输出的目录
+  SOURCES ${SWIG_INTERFACE_FILE_NAME} #.i文件
+)
+##swig_add_library运行的SWIG命令，可以在build文件夹/***/build.make中找到
+
+#为SWIG的C++工程，添加依赖库
+target_link_libraries(${SWIG_MODULE_NAME}
+  PRIVATE
+    simple
+)
+
+######################################################
+# C#工程
+# 1. 将C#的包装文件与接口文件，编译成动态库
+######################################################
+# 本示例没有依赖库
+create_dotnet_project() #直接创建csharp工程
+
+# 其他情况
+# 1. 有依赖库，但依赖库所在路径相同（都在${OUTPUT_DIR}目录下），则可以用create_dotnet_project_by_dependlibname宏
+# set(CSharpDependLib assimp.dll zlib.dll)
+# create_dotnet_project_by_dependlibname(${OUTPUT_DIR} ${CSharpDependLib})
+
+# 2. 有依赖库，但依赖库所在路径不同，则只能使用create_dotnet_project宏
+# set(CSharpDependLib D:/assimp.dll D:/zlib/zlib.dll)
+# create_dotnet_project(${CSharpDependLib})

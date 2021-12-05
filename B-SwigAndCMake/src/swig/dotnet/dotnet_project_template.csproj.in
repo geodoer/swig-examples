@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <ProjectName>@SWIG_CSHARP_NAME@</ProjectName>
+    <TargetFramework>@DotNet_Framework@</TargetFramework>
+    <Configuration>Release</Configuration>
+    <Platform>@platform_type@</Platform>
+    <OutputType>Library</OutputType>
+    <OutputPath>@OUTPUT_DIR@</OutputPath>
+    <!--输出目录去掉版本目录。没有这个标签，输出目录是OutputPath\net5 -->
+    <AppendTargetFrameworkToOutputPath>output</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <DocumentationFile>@SWIG_CSHARP_NAME@.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    @references_string@
+  </ItemGroup>
+</Project>
