@@ -1,0 +1,40 @@
+@startuml
+
+namespace cpp{
+    class BaseClass
+    class IDescription
+    class DerivedClass extends BaseClass, IDescription
+}
+
+cpp --> A : %interface_impl(IDescription)
+namespace A{
+    class BaseClass implements IDisposable
+
+    class DerivedClass extends BaseClass
+    class DerivedClass implements IDescription
+
+    interface IDescription
+    class IDescriptionSwigImpl implements IDescription,IDisposable 
+}
+
+cpp --> B : %interface(BaseClass) 
+namespace B{
+    interface BaseClassSwigInterface
+    class BaseClass implements BaseClassSwigInterface, IDisposable
+
+    class IDescription
+    class DerivedClass extends IDescription
+    class DerivedClass implements BaseClassSwigInterface
+}
+
+cpp --> C: %interface_custom("BC", "IBC" ,example::BaseClass)
+namespace C{
+    class IDescription implements IDisposable
+
+    interface IBC
+    class BC implements IBC, IDisposable
+    class DerivedClass implements IBC
+    class DerivedClass extends IDescription
+}
+
+@enduml
