@@ -129,7 +129,11 @@
     <ClCompile Include="example.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="example.i" />
+    <CustomBuild Include="example.i">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">swig -c++ -csharp  %(FullPath)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(Filename)_wrap.cxx;%(Outputs)</Outputs>
+    </CustomBuild>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

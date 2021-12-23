@@ -25,8 +25,8 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="example.i">
+    <CustomBuild Include="example.i">
       <Filter>头文件</Filter>
-    </None>
+    </CustomBuild>
   </ItemGroup>
 </Project>
