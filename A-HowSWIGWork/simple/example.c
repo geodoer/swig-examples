@@ -1,8 +1,8 @@
 ﻿#include"example.h"
 
-double Example::Foo = 0;
+double Foo = 3.0;
 
-int Example::gcd(int x, int y) {
+int gcd(int x, int y) {
 	int g;
 	g = y;
 	while (x > 0) {
